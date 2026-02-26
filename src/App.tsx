@@ -108,10 +108,10 @@ export default function App() {
                 </button>
 
                 {/* Orbiting Text */}
-                <div className="absolute w-[240px] h-[240px] animate-[spin_15s_linear_infinite] pointer-events-none peer-hover:animate-[spin_4s_linear_infinite]" style={{ filter: 'drop-shadow(0 0 8px rgba(239,68,68,0.6))' }}>
+                <div className="absolute w-[240px] h-[240px] animate-[spin_15s_linear_infinite] pointer-events-none z-20 peer-hover:animate-[spin_4s_linear_infinite]" style={{ filter: 'drop-shadow(0 0 10px rgba(239,68,68,0.9))' }}>
                   <svg viewBox="0 0 300 300" className="w-full h-full">
                     <path id="textPath" d="M 150, 150 m -110, 0 a 110,110 0 1,1 220,0 a 110,110 0 1,1 -220,0" fill="none" />
-                    <text className="text-[13.5px] font-bold uppercase tracking-[0.22em] fill-red-500">
+                    <text fontSize="14" fontWeight="bold" fontFamily="sans-serif" letterSpacing="4" fill="#ff4444">
                       <textPath href="#textPath" startOffset="0%">
                         EXCLUSIVE MASTERCLASS • 12 MAR 26 AT 4PM EST • EXCLUSIVE MASTERCLASS •
                       </textPath>
