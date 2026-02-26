@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const ASSETS = [
     {
@@ -27,80 +27,74 @@ const ASSETS = [
     },
 ];
 
+const INTERVAL_MS = 1500;
+
 export function ModelsShowcase() {
     const [activeIndex, setActiveIndex] = useState(0);
-    const itemRefs = useRef<(HTMLHeadingElement | null)[]>([]);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const index = Number(entry.target.getAttribute('data-index'));
-                        setActiveIndex(index);
-                    }
-                });
-            },
-            {
-                rootMargin: "-40% 0px -40% 0px"
-            }
-        );
-
-        itemRefs.current.forEach((ref) => {
-            if (ref) observer.observe(ref);
-        });
-
-        return () => observer.disconnect();
+        const timer = setInterval(() => {
+            setActiveIndex(prev => (prev + 1) % ASSETS.length);
+        }, INTERVAL_MS);
+        return () => clearInterval(timer);
     }, []);
 
     return (
-        <section className="relative w-full bg-black text-white" id="models">
-            {/* Sticky Background Media */}
-            <div className="sticky top-0 left-0 w-full h-screen overflow-hidden z-0">
-                {ASSETS.map((item, i) => (
-                    <div
-                        key={i}
-                        className={`absolute inset-0 transition-opacity duration-700 pointer-events-none ${i === activeIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-                    >
-                        <img
-                            src={item.media}
-                            alt={item.title}
-                            className="w-full h-full object-cover scale-105 opacity-80 mix-blend-luminosity"
-                        />
-                        {/* Dark gradient overlay for text readability */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-[#050505]/40" />
-                        <div className="absolute inset-0 bg-[#050505]/20" />
-                    </div>
-                ))}
-            </div>
+        <section className="relative w-full bg-black text-white overflow-hidden" id="models" style={{ minHeight: '100vh' }}>
+            {/* Background images — crossfade on activeIndex change */}
+            {ASSETS.map((item, i) => (
+                <div
+                    key={i}
+                    className={`absolute inset-0 transition-opacity duration-700 ${i === activeIndex ? 'opacity-100' : 'opacity-0'}`}
+                >
+                    <img
+                        src={item.media}
+                        alt={item.title}
+                        className="w-full h-full object-cover mix-blend-screen"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-black/20" />
+                </div>
+            ))}
 
-            {/* Content Layer */}
-            <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 -mt-[100vh]">
+            {/* Content overlay */}
+            <div className="relative z-10 min-h-screen flex items-center">
+                <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center py-24">
 
-                {/* Left Side: Sticky Description */}
-                <div className="hidden md:block">
-                    <div className="sticky top-1/3">
+                    {/* Left: static description */}
+                    <div>
                         <h2 className="text-5xl md:text-7xl font-sans tracking-tight font-medium mb-6 leading-[1.1]">
                             Use The Ultimate,<br /> Modern Stack
                         </h2>
                         <p className="text-xl text-white/70 max-w-md font-light leading-relaxed">
                             Combine cutting-edge AI agents and the best developer tools available. Turn your creative vision into a scalable, high-performance web experience in hours, not weeks.
                         </p>
-                    </div>
-                </div>
 
-                {/* Right Side: Scrolling List */}
-                <div className="py-[35vh] flex flex-col gap-6 md:gap-10 pb-[50vh]">
-                    {ASSETS.map((item, i) => (
-                        <h3
-                            key={i}
-                            ref={el => itemRefs.current[i] = el}
-                            data-index={i}
-                            className={`text-5xl md:text-7xl lg:text-[5.5rem] font-sans tracking-tight font-light transition-all duration-300 w-fit cursor-default ${i === activeIndex ? 'text-[#ff4040] scale-100 opacity-100' : 'text-white scale-95 opacity-50 hover:opacity-100'}`}
-                        >
-                            {item.title}
-                        </h3>
-                    ))}
+                        {/* Dot indicators */}
+                        <div className="flex gap-2 mt-10">
+                            {ASSETS.map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setActiveIndex(i)}
+                                    className={`h-1.5 rounded-full transition-all duration-300 ${i === activeIndex ? 'bg-red-500 w-8' : 'bg-white/30 w-4'}`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Right: active tool title — fades in/out */}
+                    <div className="relative flex items-center" style={{ minHeight: '10rem' }}>
+                        {ASSETS.map((item, i) => (
+                            <h3
+                                key={i}
+                                className={`absolute text-6xl md:text-8xl lg:text-[7rem] font-sans tracking-tight font-light transition-all duration-500 cursor-default select-none ${i === activeIndex
+                                        ? 'text-[#ff4040] opacity-100 translate-y-0'
+                                        : 'opacity-0 translate-y-3 pointer-events-none'
+                                    }`}
+                            >
+                                {item.title}
+                            </h3>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

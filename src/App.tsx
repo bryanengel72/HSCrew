@@ -59,7 +59,7 @@ export default function App() {
             onClick={() => setIsModalOpen(true)}
             className="px-6 py-2.5 bg-white text-black font-semibold rounded-full text-sm hover:bg-gray-200 transition-colors uppercase tracking-wide"
           >
-            Join Workshop
+            Join The Hangout
           </button>
         </div>
       </nav>
@@ -77,12 +77,12 @@ export default function App() {
           className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[600px] bg-red-600/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none z-0"
         />
 
-        <div className="max-w-7xl mx-auto relative z-10">
+        <div className="w-full relative z-10 px-6 sm:px-12 md:px-24">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-4xl"
+            className="w-full flex-1"
           >
             <h1 className="text-6xl md:text-8xl font-display tracking-wide leading-[0.9] mb-8 uppercase mt-8">
               Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">Ridiculous</span><br />
@@ -103,7 +103,7 @@ export default function App() {
                 >
                   <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_50%,#ef4444_100%)]" />
                   <span className="relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#050505] text-white font-bold rounded-full text-lg transition-all group-hover:bg-red-950/40 uppercase tracking-wide w-full h-full">
-                    Save Your Seat <Rocket className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    Join The Hangout <Rocket className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </span>
                 </button>
 
@@ -137,17 +137,17 @@ export default function App() {
         >
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex gap-16 items-center">
-              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">Zero Code</span>
+              <span className="inline-block text-2xl font-display uppercase text-white/40 hover:text-white transition-all duration-300 hover:scale-[1.2] cursor-default">Zero Code</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">Custom Animations</span>
+              <span className="inline-block text-2xl font-display uppercase text-white/40 hover:text-white transition-all duration-300 hover:scale-[1.2] cursor-default">Custom Animations</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">AI Generated</span>
+              <span className="inline-block text-2xl font-display uppercase text-white/40 hover:text-white transition-all duration-300 hover:scale-[1.2] cursor-default">AI Generated</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">High Performance</span>
+              <span className="inline-block text-2xl font-display uppercase text-white/40 hover:text-white transition-all duration-300 hover:scale-[1.2] cursor-default">High Performance</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">Vercel Hosted</span>
+              <span className="inline-block text-2xl font-display uppercase text-white/40 hover:text-white transition-all duration-300 hover:scale-[1.2] cursor-default">Vercel Hosted</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">GitHub Versioned</span>
+              <span className="inline-block text-2xl font-display uppercase text-white/40 hover:text-white transition-all duration-300 hover:scale-[1.2] cursor-default">GitHub Versioned</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
             </div>
           ))}
@@ -217,16 +217,7 @@ export default function App() {
                 Stand Out <br />
                 <span className="text-white/30">Or Fade Out.</span>
               </h2>
-              <motion.div
-                variants={{
-                  hidden: { opacity: 0 },
-                  show: { opacity: 1, transition: { staggerChildren: 0.2 } }
-                }}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                className="space-y-8"
-              >
+              <div className="space-y-8">
                 {[
                   { title: "No More Cookie-Cutter", desc: "Your photography is unique. Your website should be too. Break free from the same 3 templates everyone else uses." },
                   { title: "Lightning Fast", desc: "Build a fully custom, high-performance website in hours, not weeks. Let AI do the heavy lifting." },
@@ -234,7 +225,10 @@ export default function App() {
                 ].map((item, i) => (
                   <motion.div
                     key={i}
-                    variants={{ hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } }}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.6, ease: "easeOut", delay: i * 0.15 }}
                     className="flex gap-4"
                   >
                     <div className="w-1.5 h-auto bg-red-500 rounded-full" />
@@ -244,7 +238,7 @@ export default function App() {
                     </div>
                   </motion.div>
                 ))}
-              </motion.div>
+              </div>
             </motion.div>
 
             <motion.div
@@ -284,16 +278,24 @@ export default function App() {
           <h3 className="text-4xl md:text-5xl font-display tracking-wide uppercase mb-16">Deploy Like a Pro.</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="p-10 rounded-3xl bg-[#050505] border border-white/10 flex flex-col items-center text-center">
-              <Github className="w-16 h-16 mb-6" />
-              <h4 className="text-2xl font-bold mb-4">Store in GitHub</h4>
-              <p className="text-white/60">Keep your code safe, track changes, and never lose your work. We'll show you how to set up your repository in 2 clicks.</p>
+            {/* GitHub Card */}
+            <div className="relative p-[1px] rounded-3xl overflow-hidden group">
+              <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_65%,#ef4444_80%,#f97316_90%,transparent_100%)]" />
+              <div className="relative p-10 rounded-3xl bg-[#050505] flex flex-col items-center text-center h-full">
+                <Github className="w-16 h-16 mb-6" />
+                <h4 className="text-2xl font-bold mb-4">Store in GitHub</h4>
+                <p className="text-white/60">Keep your code safe, track changes, and never lose your work. We'll show you how to set up your repository in 2 clicks.</p>
+              </div>
             </div>
 
-            <div className="p-10 rounded-3xl bg-[#050505] border border-white/10 flex flex-col items-center text-center">
-              <Globe className="w-16 h-16 mb-6" />
-              <h4 className="text-2xl font-bold mb-4">Host on Vercel</h4>
-              <p className="text-white/60">Deploy your site globally in seconds. Enjoy blazing fast load times and automatic SSL certificates, usually for free.</p>
+            {/* Vercel Card */}
+            <div className="relative p-[1px] rounded-3xl overflow-hidden group">
+              <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite_1s] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_65%,#ef4444_80%,#f97316_90%,transparent_100%)]" />
+              <div className="relative p-10 rounded-3xl bg-[#050505] flex flex-col items-center text-center h-full">
+                <Globe className="w-16 h-16 mb-6" />
+                <h4 className="text-2xl font-bold mb-4">Host on Vercel</h4>
+                <p className="text-white/60">Deploy your site globally in seconds. Enjoy blazing fast load times and automatic SSL certificates, usually for free.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -313,7 +315,7 @@ export default function App() {
             onClick={() => setIsModalOpen(true)}
             className="px-10 py-5 bg-white text-black font-bold rounded-full text-xl hover:bg-gray-200 transition-all hover:scale-105 uppercase tracking-wide"
           >
-            Register Now
+            Join The Hangout
           </button>
         </div>
       </footer>
@@ -353,8 +355,8 @@ export default function App() {
               </button>
 
               <div className="relative z-10">
-                <h3 className="text-3xl font-display uppercase tracking-wide mb-2">Join the Crew</h3>
-                <p className="text-white/60 mb-8">Enter your name to secure your spot in the AI Web Workshop.</p>
+                <h3 className="text-3xl font-display uppercase tracking-wide mb-2">Join The Hangout</h3>
+                <p className="text-white/60 mb-8">Enter your name to secure your spot in the hangout.</p>
 
                 {isSuccess ? (
                   <motion.div
