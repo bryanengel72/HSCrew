@@ -356,6 +356,9 @@ export default function App() {
 
               <div className="relative z-10">
                 <h3 className="text-3xl font-display uppercase tracking-wide mb-2">Join The Hangout</h3>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="px-3 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 text-sm font-semibold uppercase tracking-wider">📅 Mar 12 · 4PM EST</span>
+                </div>
                 <p className="text-white/60 mb-8">Enter your name to secure your spot in the hangout.</p>
 
                 {isSuccess ? (
