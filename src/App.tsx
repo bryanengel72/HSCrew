@@ -1,7 +1,8 @@
-import { motion, AnimatePresence } from 'motion/react';
-import { Camera, Code2, Rocket, Server, Github, Globe, Zap, Layers, X, Loader2, CheckCircle2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Camera, Code2, Sparkles, Send, X, Github, Globe, Rocket, Terminal, CheckCircle2, Loader2 } from 'lucide-react';
+import React, { useState, FormEvent } from 'react';
 import { supabase } from './lib/supabase';
+import { ModelsShowcase } from './components/ModelsShowcase';
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,7 +11,7 @@ export default function App() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
 
@@ -39,7 +40,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-red-500/30 overflow-x-hidden font-sans">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-[#050505]/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -50,7 +51,7 @@ export default function App() {
             <span className="font-bold text-xl tracking-tight uppercase">Headshot Crew</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/60 tracking-wide uppercase">
-            <a href="#tools" className="hover:text-white transition-colors">The Stack</a>
+            <a href="#stack" className="hover:text-white transition-colors">The Stack</a>
             <a href="#value" className="hover:text-white transition-colors">Why AI?</a>
             <a href="#deploy" className="hover:text-white transition-colors">Deployment</a>
           </div>
@@ -64,8 +65,17 @@ export default function App() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-40 pb-20 px-6 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-600/20 rounded-full blur-[120px] pointer-events-none" />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        {/* Dark Background with subtle grain */}
+        <div className="absolute inset-0 bg-[#050505] z-0" />
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }} />
+
+        {/* Aesthetic Spotlights */}
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[600px] bg-red-600/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none z-0"
+        />
 
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
@@ -110,7 +120,7 @@ export default function App() {
                 </div>
               </div>
 
-              <a href="#tools" className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-full text-lg transition-all border border-white/10 uppercase tracking-wide z-10 flex items-center justify-center hover:scale-105">
+              <a href="#stack" className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-full text-lg transition-all border border-white/10 uppercase tracking-wide z-10 flex items-center justify-center hover:scale-105">
                 View Curriculum
               </a>
             </div>
@@ -127,25 +137,27 @@ export default function App() {
         >
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex gap-16 items-center">
-              <span className="text-2xl font-display uppercase text-white/40">Zero Code</span>
+              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">Zero Code</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-2xl font-display uppercase text-white/40">Custom Animations</span>
+              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">Custom Animations</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-2xl font-display uppercase text-white/40">AI Generated</span>
+              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">AI Generated</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-2xl font-display uppercase text-white/40">High Performance</span>
+              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">High Performance</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-2xl font-display uppercase text-white/40">Vercel Hosted</span>
+              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">Vercel Hosted</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-2xl font-display uppercase text-white/40">GitHub Versioned</span>
+              <span className="text-2xl font-display uppercase text-white/40 hover:text-white transition-colors cursor-default">GitHub Versioned</span>
               <span className="w-2 h-2 rounded-full bg-red-500" />
             </div>
           ))}
         </motion.div>
       </div>
 
-      {/* The Stack Section */}
-      <section id="tools" className="py-24 px-6 border-t border-white/5 bg-[#0a0a0a]">
+      <ModelsShowcase />
+
+      {/* The AI Stack Section */}
+      <section id="stack" className="py-24 px-6 border-t border-white/5 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
             <h2 className="text-sm font-bold text-red-500 uppercase tracking-widest mb-4">The AI Stack</h2>
@@ -160,12 +172,12 @@ export default function App() {
                 desc: "Harness the power of Gemini to draft site copy, brainstorm layouts, and structure your portfolio content, no coding required."
               },
               {
-                icon: <Layers className="w-8 h-8" />,
+                icon: <Sparkles className="w-8 h-8" />,
                 title: "Antigravity",
                 desc: "Create smooth, gravity-defying animations and interactions that make your headshots pop off the screen."
               },
               {
-                icon: <Zap className="w-8 h-8" />,
+                icon: <Terminal className="w-8 h-8" />,
                 title: "Agent Skills",
                 desc: "Leverage Claude's reasoning to generate clean code, debug layout issues, and build custom site features that go beyond any template."
               }
@@ -177,7 +189,7 @@ export default function App() {
                 whileHover={{ y: -8, scale: 1.02, rotateX: 2, rotateY: 2 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3 }}
-                className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-red-500/30 transition-colors group cursor-default shadow-xl"
+                className="p-8 rounded-3xl backdrop-blur-xl bg-white/[0.02] border border-white/10 hover:bg-white/10 hover:border-red-500/30 transition-colors group cursor-default drop-shadow-2xl"
                 style={{ perspective: 1000 }}
               >
                 <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-6 text-white group-hover:scale-110 group-hover:bg-red-500 transition-all">
@@ -205,21 +217,34 @@ export default function App() {
                 Stand Out <br />
                 <span className="text-white/30">Or Fade Out.</span>
               </h2>
-              <div className="space-y-8">
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0 },
+                  show: { opacity: 1, transition: { staggerChildren: 0.2 } }
+                }}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                className="space-y-8"
+              >
                 {[
                   { title: "No More Cookie-Cutter", desc: "Your photography is unique. Your website should be too. Break free from the same 3 templates everyone else uses." },
                   { title: "Lightning Fast", desc: "Build a fully custom, high-performance website in hours, not weeks. Let AI do the heavy lifting." },
                   { title: "Total Control", desc: "You own the code. No monthly platform fees, no restrictive builders. Just pure, clean code." }
                 ].map((item, i) => (
-                  <div key={i} className="flex gap-4">
+                  <motion.div
+                    key={i}
+                    variants={{ hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } }}
+                    className="flex gap-4"
+                  >
                     <div className="w-1.5 h-auto bg-red-500 rounded-full" />
                     <div>
                       <h4 className="text-xl font-bold mb-2">{item.title}</h4>
                       <p className="text-white/60">{item.desc}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </motion.div>
 
             <motion.div
@@ -230,9 +255,9 @@ export default function App() {
               className="relative aspect-square rounded-3xl overflow-hidden border border-white/10 bg-white/5"
             >
               <img
-                src="https://picsum.photos/seed/headshot/800/800?grayscale"
-                alt="Photography Portfolio"
-                className="w-full h-full object-cover opacity-50 mix-blend-luminosity"
+                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop"
+                alt="Professional Headshot"
+                className="w-full h-full object-cover object-top opacity-80 mix-blend-luminosity"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
@@ -340,7 +365,7 @@ export default function App() {
                     <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mb-4">
                       <CheckCircle2 className="w-8 h-8" />
                     </div>
-                    <h4 className="text-xl font-bold mb-2">You're In!</h4>
+                    <h4 className="text-xl font-bold mb-2">SHABANG!</h4>
                     <p className="text-white/60">We've added you to the list.</p>
                   </motion.div>
                 ) : (
