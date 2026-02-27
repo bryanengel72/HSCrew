@@ -1,8 +1,9 @@
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion';
 import { Camera, Code2, Sparkles, X, Github, Globe, Rocket, Terminal, CheckCircle2, Loader2, Target } from 'lucide-react';
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useRef } from 'react';
 import { supabase } from './lib/supabase';
 import { ModelsShowcase } from './components/ModelsShowcase';
+import { ScrambleText } from './components/ScrambleText';
 
 interface PotluckCardProps {
   icon: React.ReactNode;
@@ -108,6 +109,94 @@ function PotluckCard({ icon, title, desc, index }: PotluckCardProps) {
   );
 }
 
+function HeroSection({ onJoin }: { onJoin: () => void }) {
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '-25%']);
+  const glowY = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
+
+  return (
+    <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      {/* Dark Background with grain */}
+      <div className="absolute inset-0 bg-[#050505] z-0" />
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }} />
+
+      {/* Animated Red Grid */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-[0.07]">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="heroGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#ef4444" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#heroGrid)" />
+        </svg>
+      </div>
+      <motion.div
+        animate={{ opacity: [0.03, 0.12, 0.03] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(239,68,68,0.12) 0%, transparent 70%)' }}
+      />
+
+      {/* Spotlight — parallax slower */}
+      <motion.div
+        animate={{ scale: [1, 1.1, 1], opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        style={{ y: glowY }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[600px] bg-red-600/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none z-0"
+      />
+
+      {/* Content — parallax faster */}
+      <div className="w-full relative z-10 px-6 sm:px-12 md:px-24">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          style={{ y: textY }}
+          className="w-full flex-1"
+        >
+          <h1 className="text-6xl md:text-8xl font-display tracking-wide leading-[0.9] mb-8 uppercase mt-8">
+            Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500"><ScrambleText text="RIDICULOUS" delay={300} duration={1600} /></span><br />
+            <ScrambleText text="WEBSITES." delay={800} duration={1200} />
+          </h1>
+
+          <p className="text-xl md:text-2xl text-white/60 max-w-2xl leading-relaxed mb-16 font-light">
+            Stop settling for boring templates. Learn how to leverage Google AI Studio, Antigravity, and Agent Skills to generate custom, high-end photography portfolios in minutes.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-16 sm:gap-12 items-center pl-0 sm:pl-8 mt-24">
+            <div className="relative flex items-center justify-center">
+              <button
+                onClick={onJoin}
+                className="relative inline-flex overflow-hidden rounded-full p-[3px] z-10 hover:scale-105 transition-transform duration-300 peer group focus:outline-none"
+              >
+                <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_50%,#ef4444_100%)]" />
+                <span className="relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#050505] text-white font-bold rounded-full text-lg transition-all group-hover:bg-red-950/40 uppercase tracking-wide w-full h-full">
+                  Join The Hangout <Rocket className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </span>
+              </button>
+              <div className="absolute w-[240px] h-[240px] animate-[spin_15s_linear_infinite] pointer-events-none z-0" style={{ filter: 'drop-shadow(0 0 10px rgba(239,68,68,0.9))' }}>
+                <svg viewBox="0 0 300 300" className="w-full h-full">
+                  <path id="textPath" d="M 150, 150 m -110, 0 a 110,110 0 1,1 220,0 a 110,110 0 1,1 -220,0" fill="none" />
+                  <text fontSize="14" fontWeight="bold" fontFamily="sans-serif" letterSpacing="4" fill="#ff4444">
+                    <textPath href="#textPath" startOffset="0%">
+                      EXCLUSIVE MASTERCLASS • 12 MAR 26 AT 4PM EST • EXCLUSIVE MASTERCLASS •
+                    </textPath>
+                  </text>
+                </svg>
+              </div>
+            </div>
+            <a href="#stack" className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-full text-lg transition-all border border-white/10 uppercase tracking-wide z-10 flex items-center justify-center hover:scale-105">
+              View Curriculum
+            </a>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState('');
@@ -169,68 +258,9 @@ export default function App() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        {/* Dark Background with subtle grain */}
-        <div className="absolute inset-0 bg-[#050505] z-0" />
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }} />
+      <HeroSection onJoin={() => setIsModalOpen(true)} />
 
-        {/* Aesthetic Spotlights */}
-        <motion.div
-          animate={{ scale: [1, 1.1, 1], opacity: [0.6, 1, 0.6] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[600px] bg-red-600/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none z-0"
-        />
 
-        <div className="w-full relative z-10 px-6 sm:px-12 md:px-24">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="w-full flex-1"
-          >
-            <h1 className="text-6xl md:text-8xl font-display tracking-wide leading-[0.9] mb-8 uppercase mt-8">
-              Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">Ridiculous</span><br />
-              Websites.
-            </h1>
-
-            <p className="text-xl md:text-2xl text-white/60 max-w-2xl leading-relaxed mb-16 font-light">
-              Stop settling for boring templates. Learn how to leverage Google AI Studio, Antigravity, and Agent Skills to generate custom, high-end photography portfolios in minutes.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-16 sm:gap-12 items-center pl-0 sm:pl-8 mt-24">
-              {/* Orbiting Text + Glowing Button */}
-              <div className="relative flex items-center justify-center">
-                {/* Glowing Button */}
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="relative inline-flex overflow-hidden rounded-full p-[3px] z-10 hover:scale-105 transition-transform duration-300 peer group focus:outline-none"
-                >
-                  <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_50%,#ef4444_100%)]" />
-                  <span className="relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#050505] text-white font-bold rounded-full text-lg transition-all group-hover:bg-red-950/40 uppercase tracking-wide w-full h-full">
-                    Join The Hangout <Rocket className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                  </span>
-                </button>
-
-                {/* Orbiting Text */}
-                <div className="absolute w-[240px] h-[240px] animate-[spin_15s_linear_infinite] pointer-events-none z-0 peer-hover:animate-[spin_4s_linear_infinite]" style={{ filter: 'drop-shadow(0 0 10px rgba(239,68,68,0.9))' }}>
-                  <svg viewBox="0 0 300 300" className="w-full h-full">
-                    <path id="textPath" d="M 150, 150 m -110, 0 a 110,110 0 1,1 220,0 a 110,110 0 1,1 -220,0" fill="none" />
-                    <text fontSize="14" fontWeight="bold" fontFamily="sans-serif" letterSpacing="4" fill="#ff4444">
-                      <textPath href="#textPath" startOffset="0%">
-                        EXCLUSIVE MASTERCLASS • 12 MAR 26 AT 4PM EST • EXCLUSIVE MASTERCLASS •
-                      </textPath>
-                    </text>
-                  </svg>
-                </div>
-              </div>
-
-              <a href="#stack" className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-full text-lg transition-all border border-white/10 uppercase tracking-wide z-10 flex items-center justify-center hover:scale-105">
-                View Curriculum
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* Marquee */}
       <div className="py-10 border-y border-white/10 bg-white/5 overflow-hidden flex whitespace-nowrap">
@@ -463,6 +493,15 @@ export default function App() {
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-600/5 to-transparent pointer-events-none" />
+        {/* Shutter ghost background */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+          <img
+            src="/shutter.png"
+            alt=""
+            aria-hidden="true"
+            className="w-[600px] h-[600px] object-contain opacity-[0.06] mix-blend-luminosity select-none"
+          />
+        </div>
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -609,6 +648,6 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
-    </div>
+    </div >
   );
 }
