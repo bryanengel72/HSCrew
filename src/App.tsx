@@ -441,7 +441,27 @@ export default function App() {
       </section>
 
       {/* Peter Hurley Quote */}
-      <section className="py-24 px-6 border-t border-white/5 bg-[#050505] relative overflow-hidden">
+      <section className="py-24 px-6 bg-[#050505] relative overflow-hidden">
+        {/* Animated top border */}
+        <div className="absolute top-0 left-0 w-full h-[2px] overflow-hidden">
+          <div
+            className="animate-border-sweep h-full"
+            style={{
+              width: '200%',
+              background: 'linear-gradient(to right, transparent 0%, transparent 40%, #ef4444 47%, #f97316 50%, #ef4444 53%, transparent 60%, transparent 100%)',
+            }}
+          />
+        </div>
+        {/* Animated bottom border */}
+        <div className="absolute bottom-0 left-0 w-full h-[2px] overflow-hidden">
+          <div
+            className="animate-border-sweep h-full"
+            style={{
+              width: '200%',
+              background: 'linear-gradient(to right, transparent 0%, transparent 40%, #ef4444 47%, #f97316 50%, #ef4444 53%, transparent 60%, transparent 100%)',
+            }}
+          />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-600/5 to-transparent pointer-events-none" />
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <motion.div
