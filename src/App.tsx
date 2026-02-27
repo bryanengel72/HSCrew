@@ -174,7 +174,7 @@ export default function App() {
               {
                 icon: <Target className="w-8 h-8" />,
                 title: "Building A Skill",
-                desc: "WMaster the art of packaging complex instructions into modular Claude Skills. Learn to build reusable, dynamic logic that automates your specialized workflows—from document analysis to web development—with precision and speed."
+                desc: "Master the art of packaging complex instructions into modular Claude Skills. Learn to build reusable, dynamic logic that automates your specialized workflows—from document analysis to web development—with precision and speed."
               },
               {
                 icon: <Globe className="w-8 h-8" />,
