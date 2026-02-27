@@ -440,6 +440,38 @@ export default function App() {
         </div>
       </section>
 
+      {/* Peter Hurley Quote */}
+      <section className="py-24 px-6 border-t border-white/5 bg-[#050505] relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-600/5 to-transparent pointer-events-none" />
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <span className="text-red-500/60 text-5xl font-display leading-none select-none">"</span>
+            <blockquote className="text-2xl md:text-4xl font-display uppercase leading-tight tracking-wide text-white/90 mt-2 mb-8">
+              As photographers, we have the innate ability to change someone's perception of themselves with one click of the shutter.
+            </blockquote>
+            <div className="flex items-center justify-center gap-4">
+              <div className="h-px w-16 bg-red-500/40" />
+              <cite className="not-italic text-sm font-bold text-red-400 uppercase tracking-[0.2em]">Peter Hurley</cite>
+              <div className="h-px w-16 bg-red-500/40" />
+            </div>
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
+            className="mt-10 text-2xl md:text-3xl font-display uppercase tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400"
+          >
+            Your website should do the same for you.
+          </motion.p>
+        </div>
+      </section>
+
       {/* Footer CTA */}
       <footer className="py-32 px-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-red-600/10" />
