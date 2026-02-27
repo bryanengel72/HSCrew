@@ -1,8 +1,112 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, Code2, Sparkles, Send, X, Github, Globe, Rocket, Terminal, CheckCircle2, Loader2, Target } from 'lucide-react';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { Camera, Code2, Sparkles, X, Github, Globe, Rocket, Terminal, CheckCircle2, Loader2, Target } from 'lucide-react';
 import React, { useState, FormEvent } from 'react';
 import { supabase } from './lib/supabase';
 import { ModelsShowcase } from './components/ModelsShowcase';
+
+interface PotluckCardProps {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+  index: number;
+}
+
+function PotluckCard({ icon, title, desc, index }: PotluckCardProps) {
+  const xInfo = useMotionValue(0);
+  const yInfo = useMotionValue(0);
+
+  const xSpring = useSpring(xInfo, { stiffness: 150, damping: 15, mass: 0.1 });
+  const ySpring = useSpring(yInfo, { stiffness: 150, damping: 15, mass: 0.1 });
+
+  const rotateX = useTransform(ySpring, [-0.5, 0.5], [5, -5]);
+  const rotateY = useTransform(xSpring, [-0.5, 0.5], [-5, 5]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    xInfo.set((e.clientX - rect.left) / rect.width - 0.5);
+    yInfo.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    xInfo.set(0);
+    yInfo.set(0);
+  };
+
+  const [isHovered, setIsHovered] = useState(false);
+  const [hasBeenHovered, setHasBeenHovered] = useState(false);
+
+  const revealed = isHovered || hasBeenHovered;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay: index * 0.15, type: "spring", stiffness: 100, damping: 20 }}
+      whileHover={{ scale: 1.06, zIndex: 20 }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => { setIsHovered(true); setHasBeenHovered(true); }}
+      onMouseLeave={() => { handleMouseLeave(); setIsHovered(false); }}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d", zIndex: isHovered ? 20 : 10 }}
+      className="relative p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/10 hover:border-red-500/50 group overflow-hidden flex flex-col items-center text-center md:items-start md:text-left cursor-default hover:bg-[#111] hover:shadow-[0_30px_80px_rgba(239,68,68,0.25),0_0_0_1px_rgba(239,68,68,0.2)]"
+    >
+      {/* Hover gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+      {/* Watermark big number */}
+      <div
+        className="absolute -right-8 -bottom-16 text-[15rem] font-display font-black text-white/[0.02] select-none pointer-events-none group-hover:text-red-500/[0.05] transition-colors duration-500"
+        style={{ transform: "translateZ(-20px)" }}
+      >
+        {index + 1}
+      </div>
+
+      {/* Corner badge */}
+      <div className="absolute top-0 right-0 w-32 h-32 overflow-hidden rounded-tr-[2.5rem] pointer-events-none">
+        <div className="absolute top-[-40px] right-[-40px] w-full h-full bg-red-500/20 rotate-45 origin-bottom-left group-hover:bg-red-500/40 transition-colors duration-500 blur-2xl group-hover:blur-md" />
+        <motion.div
+          initial={{ y: -20, opacity: 0, scale: 0.5 }}
+          whileInView={{ y: 0, opacity: 1, scale: 1 }}
+          transition={{ delay: index * 0.15 + 0.4, type: "spring" }}
+          className="absolute top-6 right-8 text-3xl font-black text-white/20 group-hover:text-red-400 group-hover:scale-125 transition-all duration-500 font-display drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+        >
+          0{index + 1}
+        </motion.div>
+      </div>
+
+      {/* Icon */}
+      <motion.div
+        whileHover={{ scale: 1.1, rotate: [0, -10, 10, -10, 0] }}
+        transition={{ duration: 0.5 }}
+        style={{ transform: "translateZ(40px)" }}
+        className="w-20 h-20 rounded-3xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center mb-8 text-white group-hover:bg-red-500 group-hover:border-red-400 group-hover:shadow-[0_0_40px_rgba(239,68,68,0.6)] transition-all duration-500 z-10 relative"
+      >
+        {icon}
+      </motion.div>
+
+      <h4
+        className="text-2xl font-bold mb-4 z-10 relative transition-all duration-500"
+        style={{
+          transform: "translateZ(30px)",
+          filter: revealed ? 'blur(0px)' : 'blur(4px)',
+          color: revealed ? 'rgb(248 113 113)' : 'rgba(255,255,255,0.7)',
+        }}
+      >
+        {title}
+      </h4>
+      <p
+        className="leading-relaxed z-10 relative transition-all duration-500 text-lg"
+        style={{
+          transform: "translateZ(20px)",
+          filter: revealed ? 'blur(0px)' : 'blur(4px)',
+          color: revealed ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)',
+        }}
+      >
+        {desc}
+      </p>
+    </motion.div>
+  );
+}
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -162,7 +266,6 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-sm font-bold text-red-500 uppercase tracking-widest mb-4">Potluck Thursday</h2>
             <h3 className="text-4xl md:text-5xl font-display tracking-wide uppercase max-w-4xl mx-auto leading-tight">
               What you'll get leaving out of <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">Potluck Thursday.</span>
@@ -187,58 +290,7 @@ export default function App() {
                 desc: "Gain hands-on experience using Google AI Studio, Antigravity, and Agent Skills to build and customize your own ridiculous website."
               }
             ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 50, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{
-                  duration: 0.6,
-                  delay: i * 0.15,
-                  type: "spring",
-                  stiffness: 100,
-                  damping: 20
-                }}
-                className="relative p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/10 hover:border-red-500/40 transition-all duration-500 group overflow-hidden flex flex-col items-center text-center md:items-start md:text-left drop-shadow-2xl hover:shadow-[0_0_80px_rgba(239,68,68,0.1)] hover:-translate-y-2 z-10"
-              >
-                {/* Background Watermark Number */}
-                <motion.div
-                  className="absolute -right-8 -bottom-16 text-[15rem] font-display font-black text-white/[0.02] select-none pointer-events-none group-hover:text-red-500/[0.05] transition-colors duration-500"
-                  initial={{ scale: 1, rotate: 0 }}
-                  whileHover={{ scale: 1.1, rotate: -5, x: -10, y: -10 }}
-                  transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                >
-                  {i + 1}
-                </motion.div>
-
-                {/* Animated Corner Number Badge */}
-                <div className="absolute top-0 right-0 w-32 h-32 overflow-hidden rounded-tr-[2.5rem] pointer-events-none">
-                  <div className="absolute top-[-40px] right-[-40px] w-full h-full bg-red-500/20 rotate-45 transform origin-bottom-left group-hover:bg-red-500/40 transition-colors duration-500 blur-2xl group-hover:blur-md"></div>
-                  <motion.div
-                    initial={{ y: -20, opacity: 0, scale: 0.5 }}
-                    whileInView={{ y: 0, opacity: 1, scale: 1 }}
-                    transition={{ delay: i * 0.15 + 0.4, type: "spring" }}
-                    className="absolute top-6 right-8 text-3xl font-black text-white/20 group-hover:text-red-400 group-hover:scale-125 transition-all duration-500 font-display drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]"
-                  >
-                    0{i + 1}
-                  </motion.div>
-                </div>
-
-                {/* Animated Hover Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-
-                {/* Bouncing/Glowing Icon */}
-                <motion.div
-                  whileHover={{ y: -5, rotate: [0, -10, 10, -10, 0] }}
-                  transition={{ duration: 0.5 }}
-                  className="w-20 h-20 rounded-3xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center mb-8 text-white group-hover:bg-red-500 group-hover:border-red-400 group-hover:shadow-[0_0_40px_rgba(239,68,68,0.6)] transition-all duration-500 z-10 relative group-hover:scale-110"
-                >
-                  {item.icon}
-                </motion.div>
-
-                <h4 className="text-2xl font-bold mb-4 z-10 relative group-hover:text-red-400 transition-colors duration-300">{item.title}</h4>
-                <p className="text-white/60 leading-relaxed z-10 relative group-hover:text-white/90 transition-colors duration-300 text-lg">{item.desc}</p>
-              </motion.div>
+              <PotluckCard key={i} icon={item.icon} title={item.title} desc={item.desc} index={i} />
             ))}
           </div>
         </div>
