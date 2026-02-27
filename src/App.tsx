@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, Code2, Sparkles, Send, X, Github, Globe, Rocket, Terminal, CheckCircle2, Loader2 } from 'lucide-react';
+import { Camera, Code2, Sparkles, Send, X, Github, Globe, Rocket, Terminal, CheckCircle2, Loader2, Target } from 'lucide-react';
 import React, { useState, FormEvent } from 'react';
 import { supabase } from './lib/supabase';
 import { ModelsShowcase } from './components/ModelsShowcase';
@@ -156,6 +156,93 @@ export default function App() {
 
       <ModelsShowcase />
 
+      {/* Potluck Thursday Section */}
+      <section className="py-24 px-6 relative border-t border-white/5 bg-[#050505] overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-[400px] bg-red-600/10 blur-[120px] rounded-full pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-sm font-bold text-red-500 uppercase tracking-widest mb-4">Potluck Thursday</h2>
+            <h3 className="text-4xl md:text-5xl font-display tracking-wide uppercase max-w-4xl mx-auto leading-tight">
+              What you'll get leaving out of <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">Potluck Thursday.</span>
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <Target className="w-8 h-8" />,
+                title: "Building A Skill",
+                desc: "WMaster the art of packaging complex instructions into modular Claude Skills. Learn to build reusable, dynamic logic that automates your specialized workflows—from document analysis to web development—with precision and speed."
+              },
+              {
+                icon: <Globe className="w-8 h-8" />,
+                title: "Building A Website Using AI",
+                desc: "Learn the exact workflows we use to let AI generate layout codes, styling configurations, and responsive designs effortlessly."
+              },
+              {
+                icon: <Terminal className="w-8 h-8" />,
+                title: "Using Our Tools",
+                desc: "Gain hands-on experience using Google AI Studio, Antigravity, and Agent Skills to build and customize your own ridiculous website."
+              }
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{
+                  duration: 0.6,
+                  delay: i * 0.15,
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20
+                }}
+                className="relative p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/10 hover:border-red-500/40 transition-all duration-500 group overflow-hidden flex flex-col items-center text-center md:items-start md:text-left drop-shadow-2xl hover:shadow-[0_0_80px_rgba(239,68,68,0.1)] hover:-translate-y-2 z-10"
+              >
+                {/* Background Watermark Number */}
+                <motion.div
+                  className="absolute -right-8 -bottom-16 text-[15rem] font-display font-black text-white/[0.02] select-none pointer-events-none group-hover:text-red-500/[0.05] transition-colors duration-500"
+                  initial={{ scale: 1, rotate: 0 }}
+                  whileHover={{ scale: 1.1, rotate: -5, x: -10, y: -10 }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                >
+                  {i + 1}
+                </motion.div>
+
+                {/* Animated Corner Number Badge */}
+                <div className="absolute top-0 right-0 w-32 h-32 overflow-hidden rounded-tr-[2.5rem] pointer-events-none">
+                  <div className="absolute top-[-40px] right-[-40px] w-full h-full bg-red-500/20 rotate-45 transform origin-bottom-left group-hover:bg-red-500/40 transition-colors duration-500 blur-2xl group-hover:blur-md"></div>
+                  <motion.div
+                    initial={{ y: -20, opacity: 0, scale: 0.5 }}
+                    whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.15 + 0.4, type: "spring" }}
+                    className="absolute top-6 right-8 text-3xl font-black text-white/20 group-hover:text-red-400 group-hover:scale-125 transition-all duration-500 font-display drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+                  >
+                    0{i + 1}
+                  </motion.div>
+                </div>
+
+                {/* Animated Hover Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+                {/* Bouncing/Glowing Icon */}
+                <motion.div
+                  whileHover={{ y: -5, rotate: [0, -10, 10, -10, 0] }}
+                  transition={{ duration: 0.5 }}
+                  className="w-20 h-20 rounded-3xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center mb-8 text-white group-hover:bg-red-500 group-hover:border-red-400 group-hover:shadow-[0_0_40px_rgba(239,68,68,0.6)] transition-all duration-500 z-10 relative group-hover:scale-110"
+                >
+                  {item.icon}
+                </motion.div>
+
+                <h4 className="text-2xl font-bold mb-4 z-10 relative group-hover:text-red-400 transition-colors duration-300">{item.title}</h4>
+                <p className="text-white/60 leading-relaxed z-10 relative group-hover:text-white/90 transition-colors duration-300 text-lg">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
       {/* The AI Stack Section */}
       <section id="stack" className="py-24 px-6 border-t border-white/5 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto">
